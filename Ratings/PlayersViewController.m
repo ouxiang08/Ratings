@@ -114,15 +114,38 @@
 }
 */
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+	if ([segue.identifier isEqualToString:@"AddPlayer"])
+	{
+		UINavigationController *navigationController =
+        segue.destinationViewController;
+		PlayerDetailsViewController
+        *playerDetailsViewController =
+        [[navigationController viewControllers]
+         objectAtIndex:0];
+		playerDetailsViewController.delegate = self;
+	}
 }
-*/
+#pragma mark - PlayerDetailsViewControllerDelegate
 
+- (void)playerDetailsViewControllerDidCancel:
+(PlayerDetailsViewController *)controller
+{
+	[self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)playerDetailsViewController:
+(PlayerDetailsViewController *)controller
+                       didAddPlayer:(Player *)player
+{
+	[self.players addObject:player];
+	NSIndexPath *indexPath =
+    [NSIndexPath indexPathForRow:[self.players count] - 1
+                       inSection:0];
+	[self.tableView insertRowsAtIndexPaths:
+     [NSArray arrayWithObject:indexPath]
+                          withRowAnimation:UITableViewRowAnimationAutomatic];
+	[self dismissViewControllerAnimated:YES completion:nil];
+}
 @end
